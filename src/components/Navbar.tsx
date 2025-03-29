@@ -1,8 +1,13 @@
 import Link from "next/link";
 import {Icons} from "@/components/Icons";
 import {buttonVariants} from "@/components/ui/Button";
+import {getAuthSession} from "@/lib/auth";
 
-const Navbar = () => {
+const Navbar = async () => {
+
+    const session = await getAuthSession();
+
+
     return (
         <div className="fixed top-0 inset-x-0
             h-fit bg-zinc-100 border-b
@@ -28,6 +33,9 @@ const Navbar = () => {
                 {/*TODO: CREATE SEARCH BAR*/}
                 {/*SEARCH BAR*/}
 
+                {session && (
+                    <div>Hello, you are logged in!</div>
+                )}
                 <Link href="/sign-in" className={buttonVariants()}>
                     Sign in
                 </Link>
