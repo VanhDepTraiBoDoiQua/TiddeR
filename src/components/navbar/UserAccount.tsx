@@ -19,7 +19,7 @@ interface UserAccountProps {
 
 const UserAccount: FC<UserAccountProps> = ({user}) => {
     return (
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
             <DropdownMenuTrigger>
                 <UserAvatar
                     className="h-8 w-8"

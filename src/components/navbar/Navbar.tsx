@@ -33,7 +33,7 @@ const Navbar = async () => {
                 {/*TODO: CREATE SEARCH BAR*/}
                 {/*SEARCH BAR*/}
 
-                {session ? (
+                {session?.user ? (
                     <UserAccount user={session.user}/>
                 ) : (
                     <Link href="/sign-in" className={buttonVariants()}>
