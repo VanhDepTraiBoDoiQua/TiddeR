@@ -2,11 +2,11 @@ import Link from "next/link";
 import {Icons} from "@/components/Icons";
 import {buttonVariants} from "@/components/ui/Button";
 import {getAuthSession} from "@/lib/auth";
+import UserAccount from "@/components/navbar/UserAccount";
 
 const Navbar = async () => {
 
     const session = await getAuthSession();
-
 
     return (
         <div className="fixed top-0 inset-x-0
@@ -33,12 +33,13 @@ const Navbar = async () => {
                 {/*TODO: CREATE SEARCH BAR*/}
                 {/*SEARCH BAR*/}
 
-                {session && (
-                    <div>Hello, you are logged in!</div>
+                {session ? (
+                    <UserAccount user={session.user}/>
+                ) : (
+                    <Link href="/sign-in" className={buttonVariants()}>
+                        Sign in
+                    </Link>
                 )}
-                <Link href="/sign-in" className={buttonVariants()}>
-                    Sign in
-                </Link>
             </div>
         </div>
     );

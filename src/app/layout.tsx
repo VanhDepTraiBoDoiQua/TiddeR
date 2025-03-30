@@ -1,7 +1,7 @@
 import '@/styles/globals.css';
 import {Inter} from "next/font/google";
 import {cn} from "@/lib/utils";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/navbar/Navbar";
 import {Toaster} from "@/components/ui/Toaster";
 import React from "react";
 
