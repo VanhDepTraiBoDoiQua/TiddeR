@@ -55,14 +55,14 @@ model User {
   username      String?   @unique
   image         String?
 
-  accounts         Account[]
-  sessions         Session[]
-  post             Post[]
-  postVote         PostVote[]
-  comment          Comment[]
-  commentVote      CommentVote[]
-  createdCommunity Community[]    @relation("CreatedBy")
-  subscription     Subscription[]
+  accounts          Account[]
+  sessions          Session[]
+  posts             Post[]
+  postVotes         PostVote[]
+  comments          Comment[]
+  commentVotes      CommentVote[]
+  createdCommunitys Community[]    @relation("CreatedBy")
+  subscriptions     Subscription[]
 }
 
 model Community {
@@ -73,7 +73,7 @@ model Community {
   updatedAt DateTime @updatedAt
 
   creator     User?          @relation("CreatedBy", fields: [creatorId], references: [id])
-  post        Post[]
+  posts       Post[]
   subscribers Subscription[]
 
   @@index([name])
@@ -84,8 +84,8 @@ model Subscription {
   userId      String
   communityId String
 
-  user       User      @relation(fields: [userId], references: [id])
-  commmunity Community @relation(fields: [communityId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+  community Community @relation(fields: [communityId], references: [id])
 
   @@id([userId, communityId])
   @@index([communityId])
@@ -103,7 +103,7 @@ model Post {
   author    User       @relation(fields: [authorId], references: [id])
   community Community  @relation(fields: [communityId], references: [id])
   comments  Comment[]
-  postVote  PostVote[]
+  postVotes PostVote[]
 
   @@index([authorId])
   @@index([communityId])
