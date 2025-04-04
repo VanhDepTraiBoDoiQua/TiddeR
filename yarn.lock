@@ -859,10 +859,10 @@
   resolved "https://registry.npmjs.org/@uploadthing/mime-types/-/mime-types-0.2.10.tgz"
   integrity sha512-kz3F0oEgAyts25NAGXlUBCWh3mXonbSOQJFGFMawHuIgbUbnzXbe4w5WI+0XdneCbjNmikfWrdWrs8m/7HATfQ==
 
-"@uploadthing/react@^4.0.0":
-  version "4.1.3"
-  resolved "https://registry.npmjs.org/@uploadthing/react/-/react-4.1.3.tgz"
-  integrity sha512-PG463gGyFnvaBhG5tf7rLDUQb9WDbHPzcV/1EGvrkli4LoMHtBXmTeD9WujwopJ4LjyVuXLh4hgYm7ZJlMlThQ==
+"@uploadthing/react@5.0.0":
+  version "5.0.0"
+  resolved "https://registry.npmjs.org/@uploadthing/react/-/react-5.0.0.tgz"
+  integrity sha512-rWqL9V/gyCa+rWB0XNPSUEdy0w9Mlx/I/LxQkmzC2NCAwIUeub11pecdMwlKdVsogg45oMhzEI3odA2g9a5Scw==
   dependencies:
     "@uploadthing/shared" "^5.0.0"
 
@@ -4137,10 +4137,10 @@ update-browserslist-db@^1.1.1:
     escalade "^3.2.0"
     picocolors "^1.1.1"
 
-uploadthing@^4.0.0:
-  version "4.1.3"
-  resolved "https://registry.npmjs.org/uploadthing/-/uploadthing-4.1.3.tgz"
-  integrity sha512-4cvlRhtld+GwrEE3AsjBLJaqYjZOAuyzwD/69wHcYlT175Ukgw8Yn5xPRAChPIEUmCM7JLBJu6OOneSGP/mRxg==
+uploadthing@^5.0.0, uploadthing@5.0.0:
+  version "5.0.0"
+  resolved "https://registry.npmjs.org/uploadthing/-/uploadthing-5.0.0.tgz"
+  integrity sha512-ahWcBKkcOrEF3NpTH9bpZWS4ZDim92lezd3+uSLkvhUg5kKoGT1+lyOWUUWgiIq9HlYwN8oXIb8LFvg6jLv05Q==
   dependencies:
     "@uploadthing/mime-types" "^0.2.0"
     "@uploadthing/shared" "^5.0.0"
