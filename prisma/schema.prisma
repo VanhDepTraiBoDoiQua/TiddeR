@@ -8,7 +8,7 @@ generator client {
 datasource db {
   provider     = "mysql"
   url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  relationMode = "foreignKeys"
 }
 
 enum VoteType {
@@ -33,7 +33,6 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
-  @@index([userId])
 }
 
 model Session {
@@ -43,8 +42,6 @@ model Session {
   expires      DateTime
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
 }
 
 model User {
@@ -75,9 +72,6 @@ model Community {
   creator     User?          @relation("CreatedBy", fields: [creatorId], references: [id])
   posts       Post[]
   subscribers Subscription[]
-
-  @@index([name])
-  @@index([creatorId])
 }
 
 model Subscription {
@@ -88,7 +82,6 @@ model Subscription {
   community Community @relation(fields: [communityId], references: [id])
 
   @@id([userId, communityId])
-  @@index([communityId])
 }
 
 model Post {
@@ -104,9 +97,6 @@ model Post {
   community Community  @relation(fields: [communityId], references: [id])
   comments  Comment[]
   postVotes PostVote[]
-
-  @@index([authorId])
-  @@index([communityId])
 }
 
 model Comment {
@@ -123,10 +113,6 @@ model Comment {
   author  User          @relation(fields: [authorId], references: [id])
   post    Post          @relation(fields: [postId], references: [id])
   votes   CommentVote[]
-
-  @@index([replyToId])
-  @@index([authorId])
-  @@index([postId])
 }
 
 model PostVote {
@@ -138,7 +124,6 @@ model PostVote {
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@id([userId, postId])
-  @@index([postId])
 }
 
 model CommentVote {
@@ -150,5 +135,4 @@ model CommentVote {
   comment Comment @relation(fields: [commentId], references: [id])
 
   @@id([userId, commentId])
-  @@index([commentId])
 }

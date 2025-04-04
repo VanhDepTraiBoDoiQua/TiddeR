@@ -1,5 +1,5 @@
 import {getAuthSession} from "@/lib/auth";
-import {communityValidators} from "@/lib/validators/community";
+import {subscriptionValidators} from "@/lib/validators/community";
 import {db} from "@/lib/db";
 import {z} from "zod";
 
@@ -14,37 +14,29 @@ export async function POST(req: Request) {
         }
 
         const body = await req.json();
-        const {name} = communityValidators.parse(body);
+        const {communityId} = subscriptionValidators.parse(body);
 
-        const existedCommunity = await db.community.findFirst({
+        const existedSubscription = await db.subscription.findFirst({
             where: {
-                name: name
+                communityId: communityId,
+                userId: session.user.id
             }
         });
 
-        if (existedCommunity) {
+        if (existedSubscription) {
             return new Response(
-                "Community already exists", {status: 409}
+                "You are already subscribed to this community", {status: 400}
             );
         }
 
-        const newCommunity = await db.community.create({
-            data: {
-                name: name,
-                creatorId: session.user.id
-            }
-        });
-
-
         await db.subscription.create({
             data: {
-                userId: session.user.id,
-                communityId: newCommunity.id
+                communityId: communityId,
+                userId: session.user.id
             }
-        });
+        })
 
-        return new Response(newCommunity.name);
-
+        return new Response(communityId);
     } catch (error) {
         if (error instanceof z.ZodError) {
             return new Response(
@@ -53,7 +45,7 @@ export async function POST(req: Request) {
         }
 
         return new Response(
-            "Could not create new community", {status: 500}
+            "Could not subscribe to this community", {status: 500}
         );
     }
 }

@@ -3,6 +3,7 @@ import {getAuthSession} from "@/lib/auth";
 import {db} from "@/lib/db";
 import {notFound} from "next/navigation";
 import {format} from "date-fns";
+import SubscribeOrLeaveToggle from "@/components/community/SubscribeOrLeaveToggle";
 
 const CommunityLayout = async ({
                                    children,
@@ -118,8 +119,12 @@ const CommunityLayout = async ({
 
                             {community.creatorId !== session?.user.id ? (
 
-                                // TODO: SUBSCRIBE OR LEAVE BUTTON
-                                <div>button</div>
+                                // SUBSCRIBE OR LEAVE BUTTON
+                                <SubscribeOrLeaveToggle
+                                    communityId={community.id}
+                                    communityName={community.name}
+                                    isSubscribed={isSubscribed}
+                                />
                             ) : null}
                         </dl>
                     </div>
