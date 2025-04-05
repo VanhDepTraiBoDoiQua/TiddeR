@@ -60,6 +60,7 @@ const CreateCommunityPage: FC = () => {
 
         onSuccess: (data) => {
             router.push(`/t/${data}`);
+            router.refresh();
         }
     });
 

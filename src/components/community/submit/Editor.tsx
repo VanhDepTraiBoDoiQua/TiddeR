@@ -73,18 +73,18 @@ const Editor: FC<EditorProps> = ({communityId}) => {
     const router = useRouter();
 
     const initializeEditor = useCallback(async () => {
-        const editorJS = (await import("@editorjs/editorjs")).default;
-        const header = (await import("@editorjs/header")).default;
-        const embed = (await import("@editorjs/embed")).default;
-        const table = (await import("@editorjs/table")).default;
-        const list = (await import("@editorjs/list")).default;
-        const code = (await import("@editorjs/code")).default;
-        const linkTool = (await import("@editorjs/link")).default;
-        const inLineCode = (await import("@editorjs/inline-code")).default;
-        const imageTool = (await import("@editorjs/image")).default;
+        const EditorJS = (await import("@editorjs/editorjs")).default;
+        const Header = (await import("@editorjs/header")).default;
+        const Embed = (await import("@editorjs/embed")).default;
+        const Table = (await import("@editorjs/table")).default;
+        const List = (await import("@editorjs/list")).default;
+        const Code = (await import("@editorjs/code")).default;
+        const LinkTool = (await import("@editorjs/link")).default;
+        const InLineCode = (await import("@editorjs/inline-code")).default;
+        const ImageTool = (await import("@editorjs/image")).default;
 
         if (!ref.current) {
-            const editor = new editorJS({
+            const editor = new EditorJS({
                 holder: "editor",
                 onReady() {
                     ref.current = editor;
@@ -93,15 +93,15 @@ const Editor: FC<EditorProps> = ({communityId}) => {
                 inlineToolbar: true,
                 data: {blocks: []},
                 tools: {
-                    header: header,
+                    header: Header,
                     linkTool: {
-                        class: linkTool,
+                        class: LinkTool,
                         config: {
                             endpoint: "/api/link"
                         }
                     },
-                    imageTool: {
-                        class: imageTool,
+                    image: {
+                        class: ImageTool,
                         config: {
                             uploader: {
                                 async uploadByFile(file: File) {
@@ -120,11 +120,11 @@ const Editor: FC<EditorProps> = ({communityId}) => {
                             }
                         }
                     },
-                    inLineCode: inLineCode,
-                    embed: embed,
-                    table: table,
-                    list: list,
-                    code: code,
+                    inLineCode: InLineCode,
+                    embed: Embed,
+                    table: Table,
+                    list: List,
+                    code: Code,
                 }
             });
         }

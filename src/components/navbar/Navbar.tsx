@@ -31,7 +31,8 @@ const Navbar = async () => {
                 </Link>
 
                 {/*TODO: CREATE SEARCH BAR*/}
-                {/*SEARCH BAR*/}
+
+                {/*TODO: SEARCH BAR*/}
 
                 {session?.user ? (
                     <UserAccount user={session.user}/>

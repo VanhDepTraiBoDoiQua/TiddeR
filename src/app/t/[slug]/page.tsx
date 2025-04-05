@@ -3,6 +3,7 @@ import {db} from "@/lib/db";
 import {INFINITE_SCROLLING_PAGINATION_RESULTS} from "@/config";
 import {notFound} from "next/navigation";
 import MiniCreatePost from "@/components/community/MiniCreatePost";
+import PostFeed from "@/components/community/PostFeed";
 
 interface CommunityPageProps {
     params: {
@@ -49,7 +50,11 @@ const CommunityPage = async ({params}: CommunityPageProps) => {
             {/*MINI CREATE POST*/}
             <MiniCreatePost session={session}/>
 
-            {/*TODO: SHOW POSTS IN USER FEED*/}
+            {/*SHOW POSTS IN USER FEED*/}
+            <PostFeed
+                initialPosts={community.posts}
+                communityName={community.name}
+            />
 
         </>
     );
