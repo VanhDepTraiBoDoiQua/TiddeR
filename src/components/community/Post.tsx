@@ -1,14 +1,23 @@
 import {FC, useRef} from 'react';
-import {ExtendedPost} from "@/types/db";
+import {Post, PostVote, User} from "@prisma/client";
 import {formatTimeToNow} from "@/lib/utils";
 import {MessageSquare} from "lucide-react";
 import EditorOutput from "@/components/community/EditorOutput";
+import PostVoteClient from "@/components/post-vote/PostVoteClient";
+import {PartialVote} from "@/types/db";
 
 interface PostProps {
-    post: ExtendedPost;
+    communityName: string;
+    post: Post & {
+        author: User,
+        postVotes: PostVote[],
+    };
+    commentsAmount: number;
+    votesAmount: number;
+    currentVote?: PartialVote;
 }
 
-const Post: FC<PostProps> = ({post}) => {
+const Post: FC<PostProps> = ({communityName, post, commentsAmount, votesAmount, currentVote}) => {
 
     const postRef = useRef<HTMLDivElement>(null);
 
@@ -18,32 +27,39 @@ const Post: FC<PostProps> = ({post}) => {
                 justify-between"
             >
 
-                {/*TODO: ADD POST VOTE*/}
+                {/*ADD POST VOTE*/}
+                <PostVoteClient
+                    postId={post.id}
+                    initialVote={currentVote?.type}
+                    initialVotesAmount={votesAmount}
+                />
 
                 <div className="w-0 flex-1">
                     <div className="max-h-40 mt-1 text-xs
                         text-gray-500"
                     >
-                        {post.community.name ? (
+                        {communityName ? (
                             <>
                                 <a
-                                    className="underline text-zinc-900 text-sm
-                                        underline-offset-2"
-                                    href={`/t/${post.community.name}`}
+                                    className="text-zinc-900 text-sm font-medium"
+                                    href={`/t/${communityName}`}
                                 >
-                                    t/{post.community.name}
+                                    t/{communityName}
                                 </a>
                                 <span className="px-1">•</span>
                             </>
                         ) : null}
-                        <span>Posted by u/{post.author.name}</span>
-                        {" "}
                         {formatTimeToNow(new Date(post.createdAt))}
                     </div>
-                    <a
-                        href={`/t/${post.community.name}/post/${post.id}`}
+                    <span className="max-h-40 mt-1 text-xs
+                        text-gray-500"
                     >
-                        <h1 className="text-lg font-semibold py-2
+                        {post.author.name}
+                    </span>
+                    <a
+                        href={`/t/${communityName}/comments/${post.id}`}
+                    >
+                        <h1 className="text-2xl font-bold py-2
                             leading-6 text-gray-900"
                         >
                             {post.title}
@@ -72,10 +88,10 @@ const Post: FC<PostProps> = ({post}) => {
                 <a
                     className="w-fit flex items-center
                         gap-2"
-                    href={`/t/${post.community.name}`}
+                    href={`/t/${communityName}/comments/${post.id}`}
                 >
                     <MessageSquare className="h-4 w-4"/>
-                    {post.comments.length} comments
+                    {commentsAmount} comments
                 </a>
             </div>
         </div>

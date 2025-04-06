@@ -21,8 +21,6 @@ const style = {
 };
 
 function customImageRenderer({data}: any) {
-    console.log(data);
-
     const src = data.file.url
 
     return (
@@ -51,9 +49,6 @@ const renderers = {
 };
 
 const EditorOutput: FC<EditorOutputProps> = ({content}) => {
-
-    console.log(content.blocks[0].type);
-
     return (
         <Output
             style={style}
