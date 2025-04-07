@@ -9,7 +9,8 @@ import {ArrowBigDown, ArrowBigUp} from "lucide-react";
 import {cn} from "@/lib/utils";
 import {useMutation} from "@tanstack/react-query";
 import {PostVoteRequest} from "@/lib/validators/vote";
-import axios from "axios";
+import axios, {AxiosError} from "axios";
+import {toast} from "@/hooks/use-toast";
 
 interface PostVoteClientProps {
     postId: string;
@@ -27,7 +28,11 @@ const PostVoteClient: FC<PostVoteClientProps> = ({initialVote, initialVotesAmoun
 
     const prevVote = usePrevious(currentVote);
 
-    const {} = useMutation({
+    useEffect(() => {
+        setCurrentVote(initialVote);
+    }, [initialVote]);
+
+    const {mutate: vote} = useMutation({
         mutationFn: async (voteType: VoteType) => {
             const payload: PostVoteRequest = {
                 postId: postId,
@@ -35,22 +40,60 @@ const PostVoteClient: FC<PostVoteClientProps> = ({initialVote, initialVotesAmoun
             };
 
             await axios.patch("/api/community/post/vote", payload);
-        }
-    })
+        },
 
-    useEffect(() => {
-        setCurrentVote(initialVote);
-    }, [initialVote]);
+        onError: (err, voteType) => {
+            if (voteType === "UP") {
+                setVotesAmount((prev) => prev - 1);
+            } else {
+                setVotesAmount((prev) => prev + 1);
+            }
+
+            setCurrentVote(prevVote);
+
+            if (err instanceof AxiosError) {
+                if (err.response?.status === 401) {
+                    return loginToast();
+                }
+            }
+
+            return toast({
+                title: "Something went wrong",
+                description: "Your post was not registered, please try again.",
+                variant: "destructive"
+            });
+        },
+
+        onMutate: (voteType: VoteType) => {
+            if (currentVote === voteType) {
+                setCurrentVote(undefined);
+                if (voteType === "UP") {
+                    setVotesAmount((prev) => prev - 1);
+                } else if (voteType === "DOWN") {
+                    setVotesAmount((prev) => prev + 1);
+                }
+            } else {
+                setCurrentVote(voteType);
+                if (voteType === "UP") {
+                    setVotesAmount((prev) => prev + (currentVote ? 2 : 1));
+                } else if (voteType === "DOWN") {
+                    setVotesAmount((prev) => prev - (currentVote ? 2 : 1));
+                }
+            }
+        }
+    });
 
     return (
-        <div className="flex sm:flex-col gap-4
-            sm:gap-0 pr-6 sm:w-20
-            pb-4 sm:pb-0"
+        <div
+            className="flex sm:flex-col gap-4
+                sm:gap-0 pr-6 sm:w-20
+                pb-4 sm:pb-0"
         >
             <Button
                 size="sm"
                 variant="ghost"
                 aria-label="upvote"
+                onClick={() => vote("UP")}
             >
                 <ArrowBigUp
                     className={cn("h-5 w-5 text-zinc-700", {
@@ -58,8 +101,9 @@ const PostVoteClient: FC<PostVoteClientProps> = ({initialVote, initialVotesAmoun
                     })}
                 />
             </Button>
-            <p className="text-center py-2 font-medium
-                text-sm text-zinc-900"
+            <p
+                className="text-center py-2 font-medium
+                    text-sm text-zinc-900"
             >
                 {votesAmount}
             </p>
@@ -67,6 +111,7 @@ const PostVoteClient: FC<PostVoteClientProps> = ({initialVote, initialVotesAmoun
                 size="sm"
                 variant="ghost"
                 aria-label="upvote"
+                onClick={() => vote("DOWN")}
             >
                 <ArrowBigDown
                     className={cn("h-5 w-5 text-zinc-700", {

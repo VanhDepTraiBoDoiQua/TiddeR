@@ -1,10 +1,13 @@
-import {FC, useRef} from 'react';
+"use client"
+
+import {FC, useEffect, useRef, useState} from 'react';
 import {Post, PostVote, User} from "@prisma/client";
 import {formatTimeToNow} from "@/lib/utils";
-import {MessageSquare} from "lucide-react";
+import {Loader2, MessageSquare} from "lucide-react";
 import EditorOutput from "@/components/community/EditorOutput";
-import PostVoteClient from "@/components/post-vote/PostVoteClient";
+// import PostVoteClient from "@/components/post-vote/PostVoteClient";
 import {PartialVote} from "@/types/db";
+import dynamic from "next/dynamic";
 
 interface PostProps {
     communityName: string;
@@ -17,85 +20,110 @@ interface PostProps {
     currentVote?: PartialVote;
 }
 
-const Post: FC<PostProps> = ({communityName, post, commentsAmount, votesAmount, currentVote}) => {
+const PostVoteClient = dynamic(
+    async () => (await import ("@/components/post-vote/PostVoteClient")).default,
+    {ssr: false}
+);
+
+const Post: FC<PostProps> = ({
+                                 communityName,
+                                 post,
+                                 commentsAmount,
+                                 votesAmount: _votesAmount,
+                                 currentVote: _currentVote
+                             }) => {
 
     const postRef = useRef<HTMLDivElement>(null);
 
-    return (
-        <div className="rounded-md bg-white shadow">
-            <div className="px-6 py-4 flex
+    const [ready, setReady] = useState<boolean>(false);
+
+    useEffect(() => {
+        setReady(true);
+    }, []);
+
+    if (!ready) {
+        return (
+            <Loader2 className='w-6 h-6 text-zinc-500
+                animate-spin mx-auto'
+            />
+        );
+    } else {
+        return (
+            <div className="rounded-md bg-white shadow">
+                <div className="px-6 py-4 flex
                 justify-between"
-            >
+                >
 
-                {/*ADD POST VOTE*/}
-                <PostVoteClient
-                    postId={post.id}
-                    initialVote={currentVote?.type}
-                    initialVotesAmount={votesAmount}
-                />
+                    {/*ADD POST VOTE*/}
+                    <PostVoteClient
+                        postId={post.id}
+                        initialVote={_currentVote?.type}
+                        initialVotesAmount={_votesAmount}
+                    />
 
-                <div className="w-0 flex-1">
-                    <div className="max-h-40 mt-1 text-xs
+                    <div className="w-0 flex-1">
+                        <div className="max-h-40 mt-1 text-xs
                         text-gray-500"
-                    >
-                        {communityName ? (
-                            <>
-                                <a
-                                    className="text-zinc-900 text-sm font-medium"
-                                    href={`/t/${communityName}`}
-                                >
-                                    t/{communityName}
-                                </a>
-                                <span className="px-1">•</span>
-                            </>
-                        ) : null}
-                        {formatTimeToNow(new Date(post.createdAt))}
-                    </div>
-                    <span className="max-h-40 mt-1 text-xs
+                        >
+                            {communityName ? (
+                                <>
+                                    <a
+                                        className="text-zinc-900 text-sm font-medium"
+                                        href={`/t/${communityName}`}
+                                    >
+                                        t/{communityName}
+                                    </a>
+                                    <span className="px-1">•</span>
+                                </>
+                            ) : null}
+                            {formatTimeToNow(new Date(post.createdAt))}
+                        </div>
+                        <span className="max-h-40 mt-1 text-xs
                         text-gray-500"
-                    >
+                        >
                         {post.author.name}
                     </span>
-                    <a
-                        href={`/t/${communityName}/comments/${post.id}`}
-                    >
-                        <h1 className="text-2xl font-bold py-2
-                            leading-6 text-gray-900"
+                        <a
+                            href={`/t/${communityName}/comments/${post.id}`}
                         >
-                            {post.title}
-                        </h1>
-                    </a>
-                    <div
-                        className="relative text-sm max-h-40
+                            <h1 className="text-2xl font-bold py-2
+                            leading-6 text-gray-900"
+                            >
+                                {post.title}
+                            </h1>
+                        </a>
+                        <div
+                            className="relative text-sm max-h-40
                             w-full overflow-clip"
-                        ref={postRef}
-                    >
+                            ref={postRef}
+                        >
 
-                        <EditorOutput content={post.content}/>
+                            <EditorOutput content={post.content}/>
 
-                        {postRef.current?.clientHeight === 160 ? (
-                            <div className="absolute bottom-0 left-0
+                            {postRef.current?.clientHeight === 160 ? (
+                                <div className="absolute bottom-0 left-0
                                 h-24 w-full bg-gradient-to-t
                                 from-white to-transparent"
-                            />
-                        ) : null}
+                                />
+                            ) : null}
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className="bg-gray-50 z-20 text-sm
+                <div className="bg-gray-50 z-20 text-sm
                 p-4 sm:p-6"
-            >
-                <a
-                    className="w-fit flex items-center
-                        gap-2"
-                    href={`/t/${communityName}/comments/${post.id}`}
                 >
-                    <MessageSquare className="h-4 w-4"/>
-                    {commentsAmount} comments
-                </a>
+                    <a
+                        className="w-fit flex items-center
+                        gap-2"
+                        href={`/t/${communityName}/comments/${post.id}`}
+                    >
+                        <MessageSquare className="h-4 w-4"/>
+                        {commentsAmount} comments
+                    </a>
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
 };
 
 export default Post;

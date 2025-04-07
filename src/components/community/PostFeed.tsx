@@ -64,9 +64,9 @@ const PostFeed: FC<PostFeedProps> = ({initialPosts, communityName}) => {
                     return acc;
                 }, 0);
 
-                const currentPostVote = post.postVotes.find((postVote) => {
-                    postVote.userId === session?.user.id;
-                });
+                const currentPostVote = post.postVotes.find(
+                    (vote) => vote.userId === session?.user.id
+                );
 
                 if (index === posts.length - 1) {
                     return (
