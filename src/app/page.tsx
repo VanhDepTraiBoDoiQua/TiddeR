@@ -1,8 +1,13 @@
 import {HomeIcon} from "lucide-react";
 import Link from "next/link";
 import {buttonVariants} from "@/components/ui/Button";
+import {getAuthSession} from "@/lib/auth";
+import GeneralFeed from "@/components/home-feed/GeneralFeed";
 
-export default function Home() {
+export default async function Home() {
+
+    const session = await getAuthSession();
+
     return (
         <>
             <h1 className="font-bold text-3xl md:text-4xl"
@@ -12,7 +17,9 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-3
                 gap-y-4 md:gap-x-4 py-6"
             >
+
                 {/*TODO: FEED*/}
+                {session ? <GeneralFeed/> : null}
 
                 {/*TODO: COMMUNITY INFO*/}
 

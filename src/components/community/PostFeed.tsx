@@ -1,6 +1,6 @@
 "use client"
 
-import {FC, useRef} from 'react';
+import {FC, useEffect, useRef} from 'react';
 import {ExtendedPost} from "@/types/db";
 import {useIntersection} from "@mantine/hooks";
 import {useInfiniteQuery} from "@tanstack/react-query";
@@ -46,6 +46,12 @@ const PostFeed: FC<PostFeedProps> = ({initialPosts, communityName}) => {
     const posts = data?.pages.flatMap(
         (page) => page
     ) ?? initialPosts;
+
+    useEffect(() => {
+        if (entry?.isIntersecting) {
+            fetchNextPage();
+        }
+    }, [entry, fetchNextPage]);
 
     return (
         <ul className="flex flex-col col-span-2
