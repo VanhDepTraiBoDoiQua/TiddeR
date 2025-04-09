@@ -3,6 +3,7 @@ import Link from "next/link";
 import {buttonVariants} from "@/components/ui/Button";
 import {getAuthSession} from "@/lib/auth";
 import GeneralFeed from "@/components/home-feed/GeneralFeed";
+import CustomFeed from "@/components/home-feed/CustomFeed";
 
 export default async function Home() {
 
@@ -18,8 +19,9 @@ export default async function Home() {
                 gap-y-4 md:gap-x-4 py-6"
             >
 
-                {/*TODO: FEED*/}
-                {session ? <GeneralFeed/> : null}
+                {/*FEED*/}
+                {/* @ts-expect-error server component */}
+                {session ? <CustomFeed/> : <GeneralFeed/>}
 
                 {/*TODO: COMMUNITY INFO*/}
 

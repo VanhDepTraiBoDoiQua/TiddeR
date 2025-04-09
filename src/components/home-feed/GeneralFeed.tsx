@@ -1,12 +1,24 @@
-import {FC} from 'react';
+import {db} from "@/lib/db";
+import {INFINITE_SCROLLING_PAGINATION_RESULTS} from "@/config";
+import PostFeed from "@/components/community/PostFeed";
 
-interface GeneralFeedProps {
+const GeneralFeed = async () => {
 
-}
+    const posts = await db.post.findMany({
+        orderBy: {
+            createdAt: "desc",
+        },
+        include: {
+            postVotes: true,
+            author: true,
+            comments: true,
+            community: true,
+        },
+        take: INFINITE_SCROLLING_PAGINATION_RESULTS,
+    });
 
-const GeneralFeed: FC<GeneralFeedProps> = () => {
     return (
-        <></>
+        <PostFeed initialPosts={posts}/>
     );
 };
 
