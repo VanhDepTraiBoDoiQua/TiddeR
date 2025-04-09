@@ -1,7 +1,12 @@
 import {db} from "@/lib/db";
 import {INFINITE_SCROLLING_PAGINATION_RESULTS} from "@/config";
-import PostFeed from "@/components/community/PostFeed";
 import {getAuthSession} from "@/lib/auth";
+import PostFeed from "@/components/community/PostFeed";
+
+// const PostFeed = dynamic(
+//     async () => (await import ("@/components/community/PostFeed")).default,
+//     {ssr: false}
+// );
 
 const CustomFeed = async () => {
 

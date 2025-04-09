@@ -11,6 +11,11 @@ interface CommunityPageProps {
     }
 }
 
+// const PostFeed = dynamic(
+//     async () => (await import ("@/components/community/PostFeed")).default,
+//     {ssr: false}
+// );
+
 const CommunityPage = async ({params}: CommunityPageProps) => {
 
     const {slug} = params;
