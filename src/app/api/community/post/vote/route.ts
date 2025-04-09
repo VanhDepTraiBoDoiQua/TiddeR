@@ -3,7 +3,7 @@ import {getAuthSession} from "@/lib/auth";
 import {db} from "@/lib/db";
 import {CachedPost} from "@/types/redis";
 import {redis} from "@/lib/redis";
-import {Post, PostVote, User, VoteType} from "@prisma/client";
+import {Post, PostVote, User} from "@prisma/client";
 import {z} from "zod";
 
 const CACHE_AFTER_UPVOTE = 10;
@@ -27,7 +27,7 @@ function countPostVotes(post: ExistingPost) {
     );
 }
 
-async function cachePost(postVotesAmount: number, existingPost: ExistingPost, voteType: VoteType) {
+async function cachePost(postVotesAmount: number, existingPost: ExistingPost) {
     if (postVotesAmount >= CACHE_AFTER_UPVOTE) {
         const cachedPayload: CachedPost = {
             title: existingPost.title,
@@ -35,7 +35,6 @@ async function cachePost(postVotesAmount: number, existingPost: ExistingPost, vo
             id: existingPost.id,
             authorUsername: existingPost.author.username ?? "",
             createdAt: existingPost.createdAt,
-            currentPostVote: voteType
         };
 
         await redis.hset(`post:${existingPost.id}`, cachedPayload);
@@ -94,7 +93,7 @@ export async function PATCH(req: Request) {
                 const postVotesAmount = countPostVotes(existingPost);
 
                 if (postVotesAmount >= CACHE_AFTER_UPVOTE) {
-                    await cachePost(postVotesAmount, existingPost, voteType);
+                    await cachePost(postVotesAmount, existingPost);
                 }
 
                 return new Response("OK");
@@ -115,7 +114,7 @@ export async function PATCH(req: Request) {
             const postVotesAmount = countPostVotes(existingPost);
 
             if (postVotesAmount >= CACHE_AFTER_UPVOTE) {
-                await cachePost(postVotesAmount, existingPost, voteType);
+                await cachePost(postVotesAmount, existingPost);
             }
 
             return new Response("OK");
@@ -132,36 +131,10 @@ export async function PATCH(req: Request) {
         const postVotesAmount = countPostVotes(existingPost);
 
         if (postVotesAmount >= CACHE_AFTER_UPVOTE) {
-            await cachePost(postVotesAmount, existingPost, voteType);
+            await cachePost(postVotesAmount, existingPost);
         }
 
         return new Response("OK");
-
-        // RECOUNT THE VOTES
-        // const postVotesAmount1 = existingPost.postVotes.reduce(
-        //     (acc, vote) => {
-        //         if (vote.type === "UP") {
-        //             return acc + 1;
-        //         }
-        //         if (vote.type === "DOWN") {
-        //             return acc - 1;
-        //         }
-        //         return acc;
-        //     }, 0
-        // );
-
-        // if (postVotesAmount >= CACHE_AFTER_UPVOTE) {
-        //     const cachedPayload: CachedPost = {
-        //         title: existingPost.title,
-        //         content: JSON.stringify(existingPost.content),
-        //         id: existingPost.id,
-        //         authorUsername: existingPost.author.username ?? "",
-        //         createdAt: existingPost.createdAt,
-        //         currentPostVote: voteType
-        //     };
-        //
-        //     await redis.hset(`post:${postId}`, cachedPayload);
-        // }
 
     } catch (error) {
         if (error instanceof z.ZodError) {
