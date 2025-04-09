@@ -9,6 +9,8 @@ import {ArrowBigDown, ArrowBigUp, Loader2} from "lucide-react";
 import PostVoteServer from "@/components/post-vote/PostVoteServer";
 import {formatTimeToNow} from "@/lib/utils";
 import EditorOutput from "@/components/community/EditorOutput";
+import CommentsSection from "@/components/comment/CommentsSection";
+import UserAvatar from "@/components/navbar/UserAvatar";
 
 interface PostDetailPageProps {
     params: {
@@ -73,23 +75,31 @@ const PostDetailPage = async ({params}: PostDetailPageProps) => {
                 <div className="sm:w-0 w-full flex-1
                     bg-white p-4 rounded-sm"
                 >
-                    <p className="max-h-40 mt-1 truncate
-                        text-xs text-gray-500"
-                    >
-                        <a
-                            className="text-zinc-900 text-sm font-medium"
-                            href={`/t/${params.slug}`}
-                        >
-                            t/{params.slug}
-                        </a>
-                        <span className="px-1">•</span>
-                        {formatTimeToNow(new Date(post?.createdAt ?? cachedPost.content))}
-                    </p>
-                    <p className="max-h-40 mt-1 truncate
-                        text-xs text-gray-500"
-                    >
-                        {post?.author.username || cachedPost.authorUsername}
-                    </p>
+                    <div className="flex flex-row items-center">
+                        <UserAvatar user={{
+                            name: post?.author.name || null,
+                            image: post?.author.image || null,
+                        }}/>
+                        <div className="ml-2">
+                            <p className="max-h-40 mt-1 truncate
+                                text-xs text-gray-500"
+                            >
+                                <a
+                                    className="text-zinc-900 text-sm font-medium"
+                                    href={`/t/${params.slug}`}
+                                >
+                                    t/{params.slug}
+                                </a>
+                                <span className="px-1">•</span>
+                                {formatTimeToNow(new Date(post?.createdAt ?? cachedPost.content))}
+                            </p>
+                            <p className="max-h-40 mt-1 truncate
+                                text-xs text-gray-500"
+                            >
+                                {post?.author.username || cachedPost.authorUsername}
+                            </p>
+                        </div>
+                    </div>
                     <h1 className="text-xl font-semibold py-2
                         leading-6 text-gray-900"
                     >
@@ -100,7 +110,9 @@ const PostDetailPage = async ({params}: PostDetailPageProps) => {
                         fallback={<Loader2 className="h-5 w-5 animate-spin text-zinc-500"/>}
                     >
 
-                        {/*TODO: COMMENT SECTION*/}
+                        {/*COMMENT SECTION*/}
+                        {/* @ts-expect-error server component */}
+                        <CommentsSection postId={params.postId}/>
 
                     </Suspense>
                 </div>

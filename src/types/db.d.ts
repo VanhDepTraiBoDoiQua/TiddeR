@@ -8,3 +8,8 @@ export type ExtendedPost = Post & {
 };
 
 export type PartialVote = Pick<PostVote, "type">;
+
+export type ExtendedComment = Comment & {
+    author: User;
+    commentVotes: CommentVote[];
+};

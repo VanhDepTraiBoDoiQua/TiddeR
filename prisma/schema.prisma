@@ -108,11 +108,11 @@ model Comment {
   replyToId String?
   createdAt DateTime @default(now())
 
-  replyTo Comment?      @relation("ReplyTo", fields: [replyToId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  replies Comment[]     @relation("ReplyTo")
-  author  User          @relation(fields: [authorId], references: [id])
-  post    Post          @relation(fields: [postId], references: [id])
-  votes   CommentVote[]
+  replyTo      Comment?      @relation("ReplyTo", fields: [replyToId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  replies      Comment[]     @relation("ReplyTo")
+  author       User          @relation(fields: [authorId], references: [id])
+  post         Post          @relation(fields: [postId], references: [id])
+  commentVotes CommentVote[]
 }
 
 model PostVote {
