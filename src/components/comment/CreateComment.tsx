@@ -62,7 +62,7 @@ const CreateComment: FC<CreateCommentProps> = ({replyToId, postId}) => {
             router.refresh();
             setInput("");
         }
-    })
+    });
 
     return (
         <div className="grid w-full gap-1.5">

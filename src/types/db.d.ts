@@ -1,4 +1,4 @@
-import {Comment, Community, Post, PostVote, User} from "@prisma/client";
+import {Comment, CommentVote, Community, Post, PostVote, User} from "@prisma/client";
 
 export type ExtendedPost = Post & {
     community: Community;
@@ -7,9 +7,11 @@ export type ExtendedPost = Post & {
     comments: Comment[];
 };
 
-export type PartialVote = Pick<PostVote, "type">;
+export type PartialPostVote = Pick<PostVote, "type">;
 
 export type ExtendedComment = Comment & {
     author: User;
     commentVotes: CommentVote[];
 };
+
+export type PartialCommentVote = Pick<CommentVote, "type">;

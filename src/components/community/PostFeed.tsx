@@ -1,6 +1,6 @@
 "use client"
 
-import {FC, useEffect, useRef} from 'react';
+import {FC, useEffect, useRef, useState} from 'react';
 import {ExtendedPost} from "@/types/db";
 import {useIntersection} from "@mantine/hooks";
 import {useInfiniteQuery} from "@tanstack/react-query";
@@ -8,6 +8,7 @@ import {INFINITE_SCROLLING_PAGINATION_RESULTS} from "@/config";
 import axios from "axios";
 import {useSession} from "next-auth/react";
 import Post from "@/components/community/Post";
+import {Loader2} from "lucide-react";
 
 interface PostFeedProps {
     initialPosts: ExtendedPost[];
@@ -53,6 +54,18 @@ const PostFeed: FC<PostFeedProps> = ({initialPosts, communityName}) => {
         }
     }, [entry, fetchNextPage]);
 
+    const [ready, setReady] = useState(false);
+
+    useEffect(() => {
+        setReady(true);
+    }, []);
+
+    if (!ready) {
+        return (
+            <Loader2 className="m-auto animate-spin"/>
+        );
+    }
+
     return (
         <ul className="flex flex-col col-span-2
             space-y-6"
@@ -91,14 +104,17 @@ const PostFeed: FC<PostFeedProps> = ({initialPosts, communityName}) => {
                     );
                 } else {
                     return (
-                        <Post
+                        <li
                             key={post.id}
-                            post={post}
-                            commentsAmount={post.comments.length}
-                            communityName={post.community.name}
-                            currentVote={currentPostVote}
-                            votesAmount={postVoteAmount}
-                        />
+                        >
+                            <Post
+                                post={post}
+                                commentsAmount={post.comments.length}
+                                communityName={post.community.name}
+                                currentVote={currentPostVote}
+                                votesAmount={postVoteAmount}
+                            />
+                        </li>
                     );
                 }
             })}

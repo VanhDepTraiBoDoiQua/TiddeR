@@ -5,7 +5,7 @@ import {Post, PostVote, User} from "@prisma/client";
 import {formatTimeToNow} from "@/lib/utils";
 import {MessageSquare} from "lucide-react";
 import EditorOutput from "@/components/community/EditorOutput";
-import {PartialVote} from "@/types/db";
+import {PartialPostVote} from "@/types/db";
 import PostVoteClient from "@/components/post-vote/PostVoteClient";
 
 interface PostProps {
@@ -16,7 +16,7 @@ interface PostProps {
     };
     commentsAmount: number;
     votesAmount: number;
-    currentVote?: PartialVote;
+    currentVote?: PartialPostVote;
 }
 
 const Post: FC<PostProps> = ({

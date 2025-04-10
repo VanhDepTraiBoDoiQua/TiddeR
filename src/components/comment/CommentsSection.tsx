@@ -65,8 +65,53 @@ const CommentsSection = async ({postId}: CommentsSectionProps) => {
                                 className="flex flex-col"
                             >
                                 <div className="mb-2">
-                                    <SingleComment comment={topLevelComment}/>
+                                    <SingleComment
+                                        comment={topLevelComment}
+                                        postId={postId}
+                                        votesAmount={topLevelCommentVotesAmount}
+                                        currentVote={topLevelCommentVote}
+                                    />
                                 </div>
+
+                                {/*RENDER REPLIES*/}
+                                {topLevelComment.replies.sort(
+                                    (a, b) => a.createdAt.getTime() - b.createdAt.getTime()
+                                ).map(
+                                    (reply) => {
+                                        const replyVotesAmount = reply.commentVotes.reduce(
+                                            (acc, vote) => {
+                                                if (vote.type === "UP") {
+                                                    return acc + 1;
+                                                }
+                                                if (vote.type === "DOWN") {
+                                                    return acc - 1;
+                                                }
+                                                return acc;
+                                            }, 0
+                                        );
+
+                                        const replyVote = reply.commentVotes.find(
+                                            (vote) => vote.userId === session?.user.id
+                                        );
+
+                                        return (
+                                            <div
+                                                key={reply.id}
+                                                className="ml-2 py-2 pl-4 border-l-2
+                                                    border-zinc-200"
+                                            >
+                                                <SingleComment
+                                                    comment={reply}
+                                                    postId={postId}
+                                                    votesAmount={replyVotesAmount}
+                                                    currentVote={replyVote}
+                                                />
+                                            </div>
+                                        );
+                                    }
+                                )
+                                }
+
                             </div>
                         );
                     }

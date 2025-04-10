@@ -14,6 +14,7 @@ export async function POST(req: Request) {
         }
 
         const body = await req.json();
+
         const {communityId, content, title} = postValidator.parse(body);
 
         const existedSubscription = await db.subscription.findFirst({

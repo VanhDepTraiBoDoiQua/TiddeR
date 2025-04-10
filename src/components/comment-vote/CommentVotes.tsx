@@ -8,17 +8,17 @@ import {Button} from "@/components/ui/Button";
 import {ArrowBigDown, ArrowBigUp} from "lucide-react";
 import {cn} from "@/lib/utils";
 import {useMutation} from "@tanstack/react-query";
-import {PostVoteRequest} from "@/lib/validators/vote";
+import {CommentVoteRequest} from "@/lib/validators/vote";
 import axios, {AxiosError} from "axios";
 import {toast} from "@/hooks/use-toast";
 
-interface PostVoteClientProps {
-    postId: string;
+interface CommentVoteClientProps {
+    commentId: string;
     initialVotesAmount: number;
     initialVote?: VoteType | null;
 }
 
-const PostVoteClient: FC<PostVoteClientProps> = ({initialVote, initialVotesAmount, postId}) => {
+const CommentVoteClient: FC<CommentVoteClientProps> = ({initialVote, initialVotesAmount, commentId}) => {
 
     const {loginToast} = useCustomToast();
 
@@ -34,12 +34,12 @@ const PostVoteClient: FC<PostVoteClientProps> = ({initialVote, initialVotesAmoun
 
     const {mutate: vote} = useMutation({
         mutationFn: async (voteType: VoteType) => {
-            const payload: PostVoteRequest = {
-                postId: postId,
+            const payload: CommentVoteRequest = {
+                commentId: commentId,
                 voteType: voteType,
             };
 
-            await axios.patch("/api/community/post/vote", payload);
+            await axios.patch("/api/community/post/comment/vote", payload);
         },
 
         onError: (err, voteType) => {
@@ -84,11 +84,7 @@ const PostVoteClient: FC<PostVoteClientProps> = ({initialVote, initialVotesAmoun
     });
 
     return (
-        <div
-            className="flex sm:flex-col gap-4
-                sm:gap-0 pr-6 sm:w-20
-                pb-4 sm:pb-0"
-        >
+        <div className="flex gap-1">
             <Button
                 size="sm"
                 variant="ghost"
@@ -123,4 +119,4 @@ const PostVoteClient: FC<PostVoteClientProps> = ({initialVote, initialVotesAmoun
     );
 };
 
-export default PostVoteClient;
+export default CommentVoteClient;
