@@ -4,6 +4,7 @@ import {buttonVariants} from "@/components/ui/Button";
 import {getAuthSession} from "@/lib/auth";
 import GeneralFeed from "@/components/home-feed/GeneralFeed";
 import CustomFeed from "@/components/home-feed/CustomFeed";
+import CommunityList from "@/components/community/CommunityList";
 
 export default async function Home() {
 
@@ -23,11 +24,10 @@ export default async function Home() {
                 {/* @ts-expect-error server component */}
                 {session ? <CustomFeed/> : <GeneralFeed/>}
 
-                {/*TODO: COMMUNITY INFO*/}
-
+                {/*COMMUNITY INFO*/}
                 <div className="overflow-hidden h-fit rounded-lg
                     border border-gray-200 order-first
-                    md:order-last"
+                    md:order-last sticky top-20"
                 >
                     <div className="bg-emerald-100 px-6 py-4">
                         <p className="font-semibold py-3 items-center
@@ -41,13 +41,16 @@ export default async function Home() {
                         px-6 py-4 text-sm
                         leading-6"
                     >
-                        <div className="flex justify-between gap-x-4
+                        <div className="flex flex-col justify-between gap-x-4
                             py-3"
                         >
                             <p className="text-zinc-500">
                                 Your personal TiddeR homepage. Come here to check
                                 in with your favourite Communities.
                             </p>
+
+                            {/* @ts-expect-error server component*/}
+                            <CommunityList session={session}/>
                         </div>
                         <Link
                             href="/t/create"

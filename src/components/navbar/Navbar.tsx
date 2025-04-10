@@ -3,6 +3,7 @@ import {Icons} from "@/components/Icons";
 import {buttonVariants} from "@/components/ui/Button";
 import {getAuthSession} from "@/lib/auth";
 import UserAccount from "@/components/navbar/UserAccount";
+import SearchBar from "@/components/navbar/SearchBar";
 
 const Navbar = async () => {
 
@@ -30,9 +31,8 @@ const Navbar = async () => {
                     </p>
                 </Link>
 
-                {/*TODO: CREATE SEARCH BAR*/}
-
-                {/*TODO: SEARCH BAR*/}
+                {/*SEARCH BAR*/}
+                <SearchBar/>
 
                 {session?.user ? (
                     <UserAccount user={session.user}/>

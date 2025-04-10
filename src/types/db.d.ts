@@ -1,4 +1,4 @@
-import {Comment, CommentVote, Community, Post, PostVote, User} from "@prisma/client";
+import {Comment, CommentVote, Community, Post, PostVote, Subscription, User} from "@prisma/client";
 
 export type ExtendedPost = Post & {
     community: Community;
@@ -15,3 +15,11 @@ export type ExtendedComment = Comment & {
 };
 
 export type PartialCommentVote = Pick<CommentVote, "type">;
+
+export type ExtendedCommunity = Community & {
+    _count: Prisma.CommunityCountOutputType
+};
+
+export type ExtendedSubscription = Subscription & {
+    community: ExtendedCommunity;
+};
