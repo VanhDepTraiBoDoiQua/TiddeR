@@ -27,7 +27,7 @@ export default async function Home() {
                 {/*COMMUNITY INFO*/}
                 <div className="overflow-hidden h-fit rounded-lg
                     border border-gray-200 order-first
-                    md:order-last sticky top-20"
+                    md:order-last xs:order-last lg:sticky top-20"
                 >
                     <div className="bg-emerald-100 px-6 py-4">
                         <p className="font-semibold py-3 items-center
