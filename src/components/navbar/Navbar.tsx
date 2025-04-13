@@ -35,7 +35,10 @@ const Navbar = async () => {
                 <SearchBar/>
 
                 {session?.user ? (
-                    <UserAccount user={session.user}/>
+                    <div className="flex flex-row items-center gap-6">
+                        <a href="/message">Chat</a>
+                        <UserAccount user={session.user}/>
+                    </div>
                 ) : (
                     <Link href="/sign-in" className={buttonVariants()}>
                         Sign in
