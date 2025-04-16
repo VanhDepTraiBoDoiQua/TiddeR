@@ -52,14 +52,17 @@ model User {
   username      String?   @unique
   image         String?
 
-  accounts          Account[]
-  sessions          Session[]
-  posts             Post[]
-  postVotes         PostVote[]
-  comments          Comment[]
-  commentVotes      CommentVote[]
-  createdCommunitys Community[]    @relation("CreatedBy")
-  subscriptions     Subscription[]
+  accounts            Account[]
+  sessions            Session[]
+  posts               Post[]
+  postVotes           PostVote[]
+  comments            Comment[]
+  commentVotes        CommentVote[]
+  createdCommunitys   Community[]          @relation("CreatedBy")
+  subscriptions       Subscription[]
+  conversationMembers ConversationMember[]
+  messages            Message[]
+  seenMessages        SeenMessage[]
 }
 
 model Community {
@@ -104,7 +107,6 @@ model Comment {
   text      String
   authorId  String
   postId    String
-  commentId String?
   replyToId String?
   createdAt DateTime @default(now())
 
@@ -135,4 +137,49 @@ model CommentVote {
   comment Comment @relation(fields: [commentId], references: [id])
 
   @@id([userId, commentId])
+}
+
+model Conversation {
+  id            String   @id @default(cuid())
+  name          String?
+  isGroup       Boolean?
+  createdBy     String?
+  lastMessageAt DateTime @default(now())
+  createdAt     DateTime @default(now())
+
+  messages            Message[]
+  conversationMembers ConversationMember[]
+}
+
+model ConversationMember {
+  conversationId String
+  userId         String
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id])
+
+  @@id([conversationId, userId])
+}
+
+model Message {
+  id             String   @id @default(cuid())
+  userId         String
+  conversationId String
+  body           String?
+  image          String?
+  createdAt      DateTime @default(now())
+
+  User         User          @relation(fields: [userId], references: [id])
+  conversation Conversation  @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  seenMessages SeenMessage[]
+}
+
+model SeenMessage {
+  messageId String
+  userId    String
+
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@id([messageId, userId])
 }

@@ -1,14 +1,17 @@
 import {FC} from 'react';
+import EmptyState from "@/components/message/EmptyState";
 
-interface PageProps {
+interface MessagePageProps {
 
 }
 
-const Page: FC<PageProps> = () => {
+const MessagePage: FC<MessagePageProps> = () => {
 
     return (
-        <div>Message</div>
+        <div className="hidden lg:block lg:pl-64 h-full">
+            <EmptyState/>
+        </div>
     );
 };
 
-export default Page;
+export default MessagePage;
