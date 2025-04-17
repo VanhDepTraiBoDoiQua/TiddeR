@@ -28,7 +28,7 @@ const MessageForm: FC<MessageFormProps> = ({conversationId, userId}) => {
                 messageImage: messageImage,
             };
 
-            const {data} = await axios.post('/api/messages/create', payload);
+            const {data} = await axios.post('/api/message/send', payload);
             return data;
         },
 
@@ -77,6 +77,8 @@ const MessageForm: FC<MessageFormProps> = ({conversationId, userId}) => {
             flex items-center gap-2
             lg:gap-4 w-full"
         >
+
+            {/*TODO: UPLOAD IMAGE TO UPLOADTHING*/}
             <LucideImagePlus size={30}/>
             <form
                 onSubmit={handleSubmit(onSubmit)}

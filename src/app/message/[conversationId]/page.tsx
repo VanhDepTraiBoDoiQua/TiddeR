@@ -4,6 +4,7 @@ import {db} from "@/lib/db";
 import {getAuthSession} from "@/lib/auth";
 import Body from "@/components/message/conversation/Body";
 import MessageForm from "@/components/message/conversation/MessageForm";
+import {INFINITE_SCROLLING_PAGINATION_RESULTS} from "@/config";
 
 interface ConversationPageProps {
     params: {
@@ -24,6 +25,19 @@ const ConversationPage = async ({params}: ConversationPageProps) => {
                 include: {
                     user: true,
                 }
+            },
+            messages: {
+                include: {
+                    seenMessages: {
+                        include: {
+                            user: true,
+                        }
+                    }
+                },
+                orderBy: {
+                    createdAt: "desc",
+                },
+                take: INFINITE_SCROLLING_PAGINATION_RESULTS,
             }
         }
     });
@@ -33,9 +47,6 @@ const ConversationPage = async ({params}: ConversationPageProps) => {
             {user}) => user.id !== session?.user.id
         )?.user;
 
-    // TODO: GET MESSAGES
-    const messages = [];
-
     if (!conversation) {
         return (
             <div className="lg:pl-64 h-full">
@@ -43,6 +54,8 @@ const ConversationPage = async ({params}: ConversationPageProps) => {
             </div>
         );
     }
+
+    const initialMessages = conversation.messages;
 
     return (
         <div className="lg:pl-64 h-full absolute inset-0
@@ -53,7 +66,9 @@ const ConversationPage = async ({params}: ConversationPageProps) => {
              flex flex-col"
             >
                 <Header otherUser={otherUser} />
-                <Body />
+                <Body
+                    initialMessages={initialMessages}
+                />
                 <MessageForm
                     conversationId={conversation.id}
                     userId = {session!.user.id}

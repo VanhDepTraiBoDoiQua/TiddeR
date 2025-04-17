@@ -1,4 +1,4 @@
-import {Comment, CommentVote, Community, Post, PostVote, Subscription, User} from "@prisma/client";
+import {Comment, CommentVote, Community, Post, PostVote, SeenMessage, Subscription, User, Message} from "@prisma/client";
 
 export type ExtendedPost = Post & {
     community: Community;
@@ -23,3 +23,11 @@ export type ExtendedCommunity = Community & {
 export type ExtendedSubscription = Subscription & {
     community: ExtendedCommunity;
 };
+
+export type ExtendedMessage = Message & {
+    seenMessages: ExtendedSeenMessage[];
+}
+
+export type ExtendedSeenMessage = SeenMessage & {
+    user: User;
+}

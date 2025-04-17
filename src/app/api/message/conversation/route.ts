@@ -17,6 +17,18 @@ export async function POST (req: Request) {
 
         const {userId, members, isGroup, name} = conversationValidators.parse(body);
 
+        const otherUser = await db.user.findFirst({
+            where: {
+                id: userId,
+            }
+        });
+
+        if (!otherUser) {
+            return new Response(
+                "User not found", {status: 404},
+            );
+        }
+
         if (isGroup) {
             const newConversation = await db.conversation.create({
                 data: {

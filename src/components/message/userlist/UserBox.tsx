@@ -33,7 +33,7 @@ const UserBox: FC<UserBoxProps> = ({user}) => {
                 members: members,
             };
 
-            const {data} = await axios.post("/api/conversation", payload);
+            const {data} = await axios.post("/api/message/conversation", payload);
 
             setIsLoading(false);
 
@@ -57,6 +57,14 @@ const UserBox: FC<UserBoxProps> = ({user}) => {
                 if (error.response?.status === 401) {
                     return loginToast();
                 }
+
+                if (error.response?.status === 404) {
+                    return toast({
+                        title: "User not found",
+                        description: "This user do not exist.",
+                        variant: "destructive"
+                    });
+                }
             }
 
             toast({
@@ -78,10 +86,17 @@ const UserBox: FC<UserBoxProps> = ({user}) => {
                 members: [user.id],
             })}
         >
-            <UserAvatar user={{
-                name: user.username,
-                image: user.image
-            }}/>
+            <div className="relative">
+                <UserAvatar user={{
+                    name: user.username,
+                    image: user.image
+                }}/>
+                <span className="absolute bottom-0 right-0
+                                rounded-full w-3 h-3
+                                bg-green-500 outline outline-2
+                                outline-white"
+                />
+            </div>
             <div className="min-w-0 flex-1">
                 <div className="focus:outline-none">
                     <div className="flex justify-between items-center">
