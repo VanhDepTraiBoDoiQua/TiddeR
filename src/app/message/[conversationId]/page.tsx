@@ -32,7 +32,8 @@ const ConversationPage = async ({params}: ConversationPageProps) => {
                         include: {
                             user: true,
                         }
-                    }
+                    },
+                    user: true,
                 },
                 orderBy: {
                     createdAt: "desc",

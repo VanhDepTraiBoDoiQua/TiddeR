@@ -42,10 +42,10 @@ const SingleMessage: React.FC<SingleMessageProps> = ({message}) => {
         <div className={"flex gap-3 p-4 "
             + (isOwn ? "justify-end" : "")}
         >
-            <div className={(isOwn ? "order-2" : "")}>
+            <div className={"pt-6 " + (isOwn ? "order-2" : "")}>
                 <UserAvatar user={{
-                    name: session?.user.username,
-                    image: session?.user.image,
+                    name: message.user.username,
+                    image: message.user.image,
                 }}/>
             </div>
             <div className={"flex flex-col gap-2 "
@@ -53,14 +53,14 @@ const SingleMessage: React.FC<SingleMessageProps> = ({message}) => {
             >
                 <div className={"flex items-center gap-1"}>
                     <div className="text-sm text-zinc-500">
-                        {session?.user?.username}
+                        {message.user.username}
                     </div>
                     <div className="text-xs text-zinc-400">
                         {format(new Date(message.createdAt), "p")}
                     </div>
                 </div>
                 <div className={"text-sm w-fit overflow-hidden "
-                    + (isOwn ? "bg-sky-500 text-white " : " ")
+                    + (isOwn ? "bg-sky-500 text-white " : "bg-zinc-300 ")
                     + (message.image ? "rounded-md p-0" : "rounded-full py-2 px-3")}
                 >
                     {message.image ? (

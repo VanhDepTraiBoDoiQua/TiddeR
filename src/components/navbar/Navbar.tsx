@@ -36,7 +36,9 @@ const Navbar = async () => {
 
                 {session?.user ? (
                     <div className="flex flex-row items-center gap-6">
-                        <a href="/message">Chat</a>
+                        <Link href="/message">
+                            <Icons.chat className="h-10 w-10 sm:h-8 sm:w-8"/>
+                        </Link>
                         <UserAccount user={session.user}/>
                     </div>
                 ) : (

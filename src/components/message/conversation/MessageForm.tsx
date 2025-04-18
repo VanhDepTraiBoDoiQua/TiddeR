@@ -1,6 +1,6 @@
 "use client"
 
-import {FC} from 'react';
+import {ChangeEvent, FC, useRef} from 'react';
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {MessageCreationRequest, messageValidator} from "@/lib/validators/message";
@@ -10,6 +10,7 @@ import {toast} from "@/hooks/use-toast";
 import {LucideImagePlus} from "lucide-react";
 import MessageInput from "@/components/message/conversation/MessageInput";
 import {Button} from "@/components/ui/Button";
+import {uploadFiles} from "@/lib/uploadthing";
 
 interface MessageFormProps {
     conversationId: string;
@@ -17,6 +18,8 @@ interface MessageFormProps {
 }
 
 const MessageForm: FC<MessageFormProps> = ({conversationId, userId}) => {
+
+    const fileRef = useRef<HTMLInputElement>(null);
 
     const {mutate: createMessage, isLoading} = useMutation({
         mutationFn: async ({conversationId, messageImage, messageBody, userId}: MessageCreationRequest) => {
@@ -68,8 +71,30 @@ const MessageForm: FC<MessageFormProps> = ({conversationId, userId}) => {
             messageBody: getValues("messageBody"),
             messageImage: getValues("messageImage"),
         };
-
         createMessage(payload);
+    }
+
+    const handleImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            const res = await uploadByFile(file);
+            setValue("messageImage", res.file.url);
+        }
+        return;
+    }
+
+    async function uploadByFile(file: File) {
+        const [res] = await uploadFiles({
+            endpoint: "imageUploader",
+            files: [file]
+        });
+
+        return {
+            success: 1,
+            file: {
+                url: res.fileUrl
+            }
+        };
     }
 
     return (
@@ -77,9 +102,23 @@ const MessageForm: FC<MessageFormProps> = ({conversationId, userId}) => {
             flex items-center gap-2
             lg:gap-4 w-full"
         >
-
-            {/*TODO: UPLOAD IMAGE TO UPLOADTHING*/}
-            <LucideImagePlus size={30}/>
+            <Button
+                variant="ghost"
+                onClick={() =>
+                    fileRef.current?.click()}
+            >
+                <LucideImagePlus size={30}/>
+            </Button>
+            <input
+                type="file"
+                className="hidden"
+                id="chooseImage"
+                ref={fileRef}
+                onChange={ async (event) => {
+                    await handleImageUpload(event);
+                    await handleSubmit(onSubmit)();
+                }}
+            />
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="flex items-center gap-2

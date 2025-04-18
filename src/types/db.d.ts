@@ -25,6 +25,7 @@ export type ExtendedSubscription = Subscription & {
 };
 
 export type ExtendedMessage = Message & {
+    user: User;
     seenMessages: ExtendedSeenMessage[];
 }
 

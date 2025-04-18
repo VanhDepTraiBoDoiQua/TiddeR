@@ -12,7 +12,7 @@ export default function NotFound() {
                 {/* Nội dung 404 */}
                 <div className="flex flex-col justify-center items-start text-left">
                     <h1 className="text-[7.5rem] font-bold leading-none">404</h1>
-                    <h2 className="text-2xl font-bold mb-4">UH OH! You're lost.</h2>
+                    <h2 className="text-2xl font-bold mb-4">UH OH! You are lost.</h2>
                     <p className="text-base text-gray-600 mb-6">
                         The page you are looking for does not exist.
                         How you got here is a mystery. But you can click the button below

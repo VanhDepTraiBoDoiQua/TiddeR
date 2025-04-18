@@ -169,7 +169,7 @@ model Message {
   image          String?
   createdAt      DateTime @default(now())
 
-  User         User          @relation(fields: [userId], references: [id])
+  user         User          @relation(fields: [userId], references: [id])
   conversation Conversation  @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   seenMessages SeenMessage[]
 }
