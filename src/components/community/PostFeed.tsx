@@ -27,7 +27,7 @@ const PostFeed: FC<PostFeedProps> = ({initialPosts, communityName}) => {
     });
 
     const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery({
-        queryKey: ["infiniteQuery"],
+        queryKey: ["posts"],
         queryFn: async ({pageParam = 1}) => {
             const query = `/api/posts?limit=${INFINITE_SCROLLING_PAGINATION_RESULTS}&page=${pageParam}`
                 + (!!communityName ? `&communityName=${communityName}` : "");

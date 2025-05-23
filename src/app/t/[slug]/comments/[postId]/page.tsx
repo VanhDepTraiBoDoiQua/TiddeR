@@ -1,5 +1,3 @@
-import {redis} from "@/lib/redis";
-import {CachedPost} from "@/types/redis";
 import {Post, PostVote, User} from "@prisma/client";
 import {db} from "@/lib/db";
 import {notFound} from "next/navigation";
@@ -24,9 +22,11 @@ export const fetchCache = "force-no-store";
 
 const PostDetailPage = async ({params}: PostDetailPageProps) => {
 
-    const cachedPost = await redis.hgetall(
-        `posts:${params.postId}`
-    ) as CachedPost;
+    // const cachedPost = await redis.hgetall(
+    //     `posts:${params.postId}`
+    // ) as CachedPost;
+
+    const cachedPost = null;
 
     let post: (Post & {
         postVotes: PostVote[],

@@ -9,6 +9,7 @@ import {ConversationRequest} from "@/lib/validators/conversation";
 import {toast} from "@/hooks/use-toast";
 import {useCustomToast} from "@/hooks/use-custom-toast";
 import UserAvatar from "@/components/navbar/UserAvatar";
+import {useSocket} from "@/components/contexts/socket-provider";
 
 interface UserBoxProps {
     user: User;
@@ -21,6 +22,8 @@ const UserBox: FC<UserBoxProps> = ({user}) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const {loginToast} = useCustomToast();
+
+    const {socket} = useSocket();
 
     const {mutate: conversation} = useMutation({
         mutationFn: async ({userId, isGroup, members, name}: ConversationRequest) => {
@@ -41,6 +44,7 @@ const UserBox: FC<UserBoxProps> = ({user}) => {
         },
 
         onSuccess: (data) => {
+            socket.emit("join", data.id);
             router.push(`/message/${data.id}`);
         },
 

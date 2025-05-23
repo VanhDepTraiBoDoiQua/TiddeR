@@ -1,4 +1,7 @@
 import {Comment, CommentVote, Community, Post, PostVote, SeenMessage, Subscription, User, Message} from "@prisma/client";
+import {Server as NetServer, Socket} from "net";
+import {Server as SocketIOServer} from "socket.io";
+import {NextApiResponse} from "next";
 
 export type ExtendedPost = Post & {
     community: Community;
@@ -32,3 +35,11 @@ export type ExtendedMessage = Message & {
 export type ExtendedSeenMessage = SeenMessage & {
     user: User;
 }
+
+export type NextApiResponseServerIo = NextApiResponse & {
+    socket: Socket & {
+        server: NetServer & {
+            io: SocketIOServer;
+        };
+    };
+};

@@ -4,7 +4,7 @@ import {ChangeEvent, FC, useRef} from 'react';
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {MessageCreationRequest, messageValidator} from "@/lib/validators/message";
-import {useMutation} from "@tanstack/react-query";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
 import axios from "axios";
 import {toast} from "@/hooks/use-toast";
 import {LucideImagePlus} from "lucide-react";
@@ -21,6 +21,8 @@ const MessageForm: FC<MessageFormProps> = ({conversationId, userId}) => {
 
     const fileRef = useRef<HTMLInputElement>(null);
 
+    const queryClient = useQueryClient();
+
     const {mutate: createMessage, isLoading} = useMutation({
         mutationFn: async ({conversationId, messageImage, messageBody, userId}: MessageCreationRequest) => {
 
@@ -31,7 +33,7 @@ const MessageForm: FC<MessageFormProps> = ({conversationId, userId}) => {
                 messageImage: messageImage,
             };
 
-            const {data} = await axios.post('/api/message/send', payload);
+            const {data} = await axios.post('/api/socket/sendMessage', payload);
             return data;
         },
 
@@ -45,6 +47,7 @@ const MessageForm: FC<MessageFormProps> = ({conversationId, userId}) => {
 
         onSuccess: () => {
             setValue("messageBody", "", {shouldValidate: true});
+            queryClient.invalidateQueries(["messages"]);
         },
     });
 

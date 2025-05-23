@@ -77,7 +77,7 @@ const SearchBar: FC<SearchBarProps> = () => {
                 <CommandList className="absolute bg-white top-full
                     inset-x-0 shadow rounded-b-md"
                 >
-                    {isFetched && input.length >= 3 &&
+                    {isFetched &&
                         <CommandEmpty>
                             No results found.
                         </CommandEmpty>
