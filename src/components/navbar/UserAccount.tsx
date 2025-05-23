@@ -14,7 +14,7 @@ import Link from "next/link";
 import {signOut} from "next-auth/react";
 
 interface UserAccountProps {
-    user: Pick<User, "name" | "image" | "email">;
+    user: Pick<User, "name" | "image" | "email" | "id">;
 }
 
 const UserAccount: FC<UserAccountProps> = ({user}) => {
@@ -60,6 +60,10 @@ const UserAccount: FC<UserAccountProps> = ({user}) => {
 
                 <DropdownMenuItem asChild className="cursor-pointer">
                     <Link href="/t/create">Create Community</Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem asChild className="cursor-pointer">
+                    <Link href={`/profile/${user.id}`}>Profile</Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem asChild className="cursor-pointer">

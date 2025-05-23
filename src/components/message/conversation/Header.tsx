@@ -5,6 +5,7 @@ import {User} from "@prisma/client";
 import Link from "next/link";
 import {Icons} from "@/components/Icons";
 import UserAvatar from "@/components/navbar/UserAvatar";
+import {SocketIndicator} from "@/components/ui/SocketIndicator";
 
 interface HeaderProps {
     otherUser: User | undefined;
@@ -43,6 +44,9 @@ const Header: FC<HeaderProps> = ({otherUser}) => {
                         Active
                     </div>
                 </div>
+            </div>
+            <div className="mr-0">
+                <SocketIndicator/>
             </div>
         </div>
     );

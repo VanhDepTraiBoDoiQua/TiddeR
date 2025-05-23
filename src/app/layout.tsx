@@ -5,6 +5,7 @@ import Navbar from "@/components/navbar/Navbar";
 import {Toaster} from "@/components/ui/Toaster";
 import React from "react";
 import Providers from "@/components/contexts/Providers";
+import {SocketProvider} from "@/components/contexts/socket-provider";
 
 export const metadata = {
     title: "TiddeR",
@@ -29,21 +30,22 @@ export default function RootLayout({
         <body className="min-h-screen pt-12 bg-slate-50
                 antialiased"
         >
-        <Providers>
+        <SocketProvider>
+            <Providers>
 
-            {/*NAVBAR*/}
-            {/* @ts-expect-error server component */}
-            <Navbar/>
+                {/*NAVBAR*/}
+                {/* @ts-expect-error server component */}
+                <Navbar/>
 
-            {authModal}
-
-            <div className="container max-w-7xl mx-auto
-                        h-full pt-12"
-            >
-                {children}
-            </div>
-            <Toaster/>
-        </Providers>
+                {authModal}
+                    <div className="container max-w-7xl mx-auto
+                                h-full pt-12"
+                    >
+                        {children}
+                    </div>
+                <Toaster/>
+            </Providers>
+        </SocketProvider>
         </body>
         </html>
     )

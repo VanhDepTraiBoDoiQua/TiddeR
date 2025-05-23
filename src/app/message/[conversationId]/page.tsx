@@ -5,6 +5,7 @@ import {getAuthSession} from "@/lib/auth";
 import Body from "@/components/message/conversation/Body";
 import MessageForm from "@/components/message/conversation/MessageForm";
 import {INFINITE_SCROLLING_PAGINATION_RESULTS} from "@/config";
+import {redirect} from "next/navigation";
 
 interface ConversationPageProps {
     params: {
@@ -15,6 +16,10 @@ interface ConversationPageProps {
 const ConversationPage = async ({params}: ConversationPageProps) => {
 
     const session = await getAuthSession();
+
+    if (!session) {
+        redirect("/sign-in");
+    }
 
     const conversation = await db.conversation.findFirst({
         where: {
@@ -69,6 +74,7 @@ const ConversationPage = async ({params}: ConversationPageProps) => {
                 <Header otherUser={otherUser} />
                 <Body
                     initialMessages={initialMessages}
+                    conversationId={conversation.id}
                 />
                 <MessageForm
                     conversationId={conversation.id}
